@@ -882,7 +882,7 @@
         matchedTopics++;
 
         const card = document.createElement("div");
-        card.className = "topic-card" + (idx === 0 || filterQuery ? " open" : "");
+        card.className = "topic-card" + (filterQuery ? " open" : "");
         card.id = `topic-card-${idx}`;
 
         card.innerHTML = `
