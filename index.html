@@ -30,10 +30,17 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+      box-sizing: border-box;
+    }
+
     body {
       background-color: var(--bg);
       color: var(--text);
-      padding: 14px;
+      padding: 12px;
       padding-bottom: 50px;
       line-height: 1.4;
       min-height: 100vh;
@@ -44,18 +51,22 @@
     .top-nav-bar {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
+      gap: 8px;
+      margin-bottom: 16px;
       position: relative;
       z-index: 50;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .nav-back-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
       background: var(--card-bg);
       border: 1.5px solid var(--border);
       border-radius: 12px;
@@ -63,6 +74,7 @@
       cursor: pointer;
       flex-shrink: 0;
       transition: all 0.2s ease;
+      box-sizing: border-box;
     }
 
     .nav-back-btn:active {
@@ -76,6 +88,8 @@
     .selector-container {
       position: relative;
       flex: 1;
+      min-width: 0;
+      max-width: 100%;
       margin-bottom: 0;
       z-index: 50;
     }
@@ -84,16 +98,29 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
       background: var(--card-bg);
       border: 1.5px solid var(--border);
       border-radius: 12px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 1.05rem;
-      letter-spacing: 0.3px;
+      font-size: 0.95rem;
+      letter-spacing: 0.2px;
       transition: all 0.2s ease;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    #current-mode-label {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+      flex: 1;
+      text-align: left;
     }
 
     .selector-bar:active {
@@ -105,6 +132,7 @@
       font-size: 0.8rem;
       color: var(--accent);
       transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
     }
 
     .selector-arrow.open {
@@ -169,24 +197,31 @@
     /* Platform Grid (first.jpg) */
     .grid-container {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
       margin-bottom: 25px;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .grid-cell {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
-      border-radius: 16px;
+      border-radius: 14px;
       aspect-ratio: 1 / 1.08;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 8px 6px;
+      padding: 6px 4px;
       cursor: pointer;
       position: relative;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      box-sizing: border-box;
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
@@ -197,42 +232,48 @@
 
     /* Cell Icon */
     .cell-logo {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 8px;
-      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      margin-bottom: 6px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       flex-shrink: 0;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     }
 
     .cell-logo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: 10px;
     }
 
     .cell-title {
-      font-size: 0.8rem;
+      font-size: 0.74rem;
       font-weight: 700;
       color: var(--text);
+      max-width: 100%;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 2px;
+      padding: 0 2px;
+    }
+
+    .cell-badge {
+      font-size: 0.62rem;
+      color: var(--hint);
+      padding: 1px 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 99px;
       max-width: 95%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-bottom: 4px;
-    }
-
-    .cell-badge {
-      font-size: 0.65rem;
-      color: var(--hint);
-      padding: 2px 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 99px;
     }
 
     /* Clicked platform cell that is greyed out a bit */
@@ -270,53 +311,72 @@
     .prof-card-cell {
       grid-column: span 3;
       aspect-ratio: auto;
-      min-height: 85px;
-      padding: 14px 18px;
+      min-height: 75px;
+      padding: 12px 14px;
       flex-direction: row;
       justify-content: flex-start;
-      gap: 16px;
+      gap: 12px;
       text-align: left;
-      border-radius: 16px;
+      border-radius: 14px;
       background: #131d2e;
       border: 1.5px solid var(--border);
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
     }
 
     .prof-card-cell .cell-logo {
-      width: 52px;
-      height: 52px;
+      width: 48px;
+      height: 48px;
       margin-bottom: 0;
-      font-size: 1.6rem;
-      border-radius: 14px;
+      font-size: 1.5rem;
+      border-radius: 12px;
       background: #1e293b;
+      flex-shrink: 0;
     }
 
     .prof-card-details {
       display: flex;
       flex-direction: column;
       flex: 1;
+      min-width: 0;
+      overflow: hidden;
     }
 
     .prof-card-title {
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: #fff;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
     }
 
     .prof-card-sub {
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       color: var(--text-muted);
       margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
     }
 
     .prof-card-badge {
       align-self: flex-start;
-      font-size: 0.68rem;
-      padding: 2px 8px;
+      font-size: 0.66rem;
+      padding: 2px 7px;
       background: rgba(56, 189, 248, 0.15);
       color: var(--accent);
       border-radius: 6px;
       font-weight: 700;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* Section Header */
@@ -415,6 +475,9 @@
       flex-direction: column;
       gap: 10px;
       margin-bottom: 25px;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .topic-card {
@@ -423,6 +486,10 @@
       border-radius: 14px;
       overflow: hidden;
       transition: border-color 0.2s;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      min-width: 0;
     }
 
     .topic-card.open {
@@ -433,9 +500,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 16px;
+      padding: 12px 14px;
       cursor: pointer;
       user-select: none;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      min-width: 0;
+      gap: 8px;
     }
 
     .topic-header:active {
@@ -446,16 +518,24 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
     }
 
     .topic-name {
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      display: block;
     }
 
     .topic-count {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--hint);
     }
 
@@ -463,7 +543,7 @@
       font-size: 0.8rem;
       color: var(--hint);
       transition: transform 0.25s ease;
-      margin-left: 8px;
+      flex-shrink: 0;
     }
 
     .topic-card.open .topic-chevron {
@@ -474,11 +554,14 @@
     /* Topic Content Video List */
     .topic-content {
       display: none;
-      padding: 12px;
+      padding: 10px;
       background: #0d121f;
       border-top: 1px solid rgba(255, 255, 255, 0.06);
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .topic-card.open .topic-content {
@@ -489,7 +572,7 @@
     .video-card {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       background: #141c2c;
       border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 12px;
@@ -497,6 +580,11 @@
       cursor: pointer;
       transition: all 0.2s ease;
       position: relative;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      min-width: 0;
+      overflow: hidden;
     }
 
     .video-card:active {
@@ -505,8 +593,8 @@
     }
 
     .video-thumb {
-      width: 72px;
-      height: 48px;
+      width: 64px;
+      height: 44px;
       background: #1e293b;
       border-radius: 8px;
       display: flex;
@@ -519,7 +607,7 @@
     }
 
     .thumb-play-icon {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: var(--accent);
     }
 
@@ -528,7 +616,7 @@
       bottom: 2px;
       right: 3px;
       background: rgba(0, 0, 0, 0.75);
-      font-size: 0.55rem;
+      font-size: 0.52rem;
       padding: 1px 3px;
       border-radius: 3px;
       color: #cbd5e1;
@@ -538,10 +626,11 @@
     .video-details {
       flex: 1;
       min-width: 0;
+      overflow: hidden;
     }
 
     .video-title {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
       color: #f1f5f9;
       line-height: 1.3;
@@ -550,6 +639,8 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       margin-bottom: 4px;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
 
     .video-duration {
