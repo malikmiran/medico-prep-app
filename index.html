@@ -41,10 +41,43 @@
       user-select: none;
     }
 
+    /* Top Navigation Bar with Back Button on Left of Dropdown */
+    .top-nav-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 50;
+    }
+
+    .nav-back-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .nav-back-btn:active {
+      transform: scale(0.92);
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+    }
+
     /* Top Selector Bar (first.jpg & second.jpg) */
     .selector-container {
       position: relative;
-      margin-bottom: 18px;
+      flex: 1;
+      margin-bottom: 0;
       z-index: 50;
     }
 
@@ -134,34 +167,6 @@
 
     .dropdown-item.active .dropdown-check {
       display: block;
-    }
-
-    /* Active filter indicator / reset bar */
-    .filter-info-bar {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid var(--accent);
-      border-radius: 10px;
-      padding: 8px 12px;
-      margin-bottom: 14px;
-      font-size: 0.85rem;
-    }
-
-    .filter-info-bar.visible {
-      display: flex;
-    }
-
-    .reset-btn {
-      background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 6px;
-      cursor: pointer;
     }
 
     /* Platform Grid (first.jpg) */
@@ -572,32 +577,33 @@
 </head>
 <body>
 
-  <!-- Top Selector (first.jpg & second.jpg) -->
-  <div class="selector-container">
-    <div class="selector-bar" id="selector-bar" onclick="toggleDropdown()">
-      <span id="current-mode-label">Platform Wise</span>
-      <span class="selector-arrow" id="selector-arrow">▼</span>
+  <!-- Top Navigation with Back Button on Left of Dropdown Menu -->
+  <div class="top-nav-bar">
+    <button class="nav-back-btn" id="nav-back-btn" onclick="handleNavBack()" title="Back">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+    <div class="selector-container">
+      <div class="selector-bar" id="selector-bar" onclick="toggleDropdown()">
+        <span id="current-mode-label">Platform Wise</span>
+        <span class="selector-arrow" id="selector-arrow">▼</span>
+      </div>
+      <div class="dropdown-menu" id="dropdown-menu">
+        <div class="dropdown-item active" id="mode-platform" onclick="setMode('platform')">
+          <span>Platform Wise</span>
+          <span class="dropdown-check">✓</span>
+        </div>
+        <div class="dropdown-item" id="mode-year" onclick="setMode('year')">
+          <span>Year Wise 1st 2nd...</span>
+          <span class="dropdown-check">✓</span>
+        </div>
+        <div class="dropdown-item" id="mode-teacher" onclick="setMode('teacher')">
+          <span>Teacher Wise</span>
+          <span class="dropdown-check">✓</span>
+        </div>
+      </div>
     </div>
-    <div class="dropdown-menu" id="dropdown-menu">
-      <div class="dropdown-item active" id="mode-platform" onclick="setMode('platform')">
-        <span>Platform Wise</span>
-        <span class="dropdown-check">✓</span>
-      </div>
-      <div class="dropdown-item" id="mode-year" onclick="setMode('year')">
-        <span>Year Wise 1st 2nd...</span>
-        <span class="dropdown-check">✓</span>
-      </div>
-      <div class="dropdown-item" id="mode-teacher" onclick="setMode('teacher')">
-        <span>Teacher Wise</span>
-        <span class="dropdown-check">✓</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Filter / Active platform breadcrumb info -->
-  <div class="filter-info-bar" id="filter-info-bar">
-    <span id="filter-info-text">Showing Subcategories</span>
-    <button class="reset-btn" onclick="resetPlatformSelection()">Reset</button>
   </div>
 
   <!-- Main Grid View (first.jpg) -->
@@ -687,15 +693,25 @@
       document.getElementById("current-mode-label").textContent = labelMap[mode];
 
       selectedPlatformId = null;
-      document.getElementById("filter-info-bar").classList.remove("visible");
       backToGrid();
       renderGrid();
+    }
+
+    function handleNavBack() {
+      haptic();
+      const topicView = document.getElementById("topic-view-container");
+      if (topicView && topicView.classList.contains("visible")) {
+        backToGrid();
+      } else if (selectedPlatformId) {
+        resetPlatformSelection();
+      } else if (currentMode !== "platform") {
+        setMode("platform");
+      }
     }
 
     function resetPlatformSelection() {
       haptic();
       selectedPlatformId = null;
-      document.getElementById("filter-info-bar").classList.remove("visible");
       renderGrid();
     }
 
@@ -744,15 +760,12 @@
       }
 
       // PLATFORM WISE MODE
-      const infoBar = document.getElementById("filter-info-bar");
       if (selectedPlatformId) {
         // A platform is selected:
         // 1. The clicked platform cell stays in its exact original grid cell and greys out a bit
         // 2. All rest cells fill with its content subcategory! (Matches one.png, two.png, three.png)
         const platform = APP_DATA.platforms.find(p => p.id === selectedPlatformId);
         const pIndex = APP_DATA.platforms.findIndex(p => p.id === selectedPlatformId);
-        infoBar.classList.add("visible");
-        document.getElementById("filter-info-text").textContent = `Category: ${platform.name}`;
 
         let subcatIdx = 0;
         const totalSlots = Math.max(6, APP_DATA.platforms.length);
@@ -828,7 +841,6 @@
       haptic();
       currentCategoryData = { title, subtitle, topics };
       document.getElementById("grid-container").style.display = "none";
-      document.getElementById("filter-info-bar").classList.remove("visible");
       document.getElementById("topic-view-container").classList.add("visible");
       document.getElementById("topic-view-title").textContent = title;
       document.getElementById("topic-view-sub").textContent = subtitle;
@@ -841,9 +853,6 @@
       haptic();
       document.getElementById("topic-view-container").classList.remove("visible");
       document.getElementById("grid-container").style.display = "grid";
-      if (selectedPlatformId && currentMode === "platform") {
-        document.getElementById("filter-info-bar").classList.add("visible");
-      }
     }
 
     // Render topics dropdown accordion (third.jpg)
