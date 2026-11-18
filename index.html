@@ -249,9 +249,9 @@
     }
 
     .grid-cell.greyed-out .cell-badge {
-      background: var(--accent);
-      color: #000;
-      font-weight: bold;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--hint);
+      font-weight: 500;
     }
 
     /* Subcategory cells dynamically filling grid */
@@ -780,7 +780,7 @@
                 <img src="${platform.logo}" alt="${platform.name}">
               </div>
               <div class="cell-title">${platform.name}</div>
-              <div class="cell-badge">Selected (Tap to reset)</div>
+              <div class="cell-badge">${platform.subcategories.length} Courses</div>
             `;
             activeCell.onclick = resetPlatformSelection;
             grid.appendChild(activeCell);
